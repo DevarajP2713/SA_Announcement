@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "sa-announcement-client-side-solution",
+    "id": "2c87262e-4a7d-49a6-8f32-553eb72a10dc",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.18.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "sa-announcement description"
+      },
+      "longDescription": {
+        "default": "sa-announcement description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "sa-announcement Feature",
+        "description": "The feature that activates elements of the sa-announcement solution.",
+        "id": "f6a7fc59-9a53-4056-abd8-75f5bd2d1c96",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/sa-announcement.sppkg"
+  }
+}
