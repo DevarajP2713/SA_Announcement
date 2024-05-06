@@ -142,14 +142,14 @@ h4 {
 }
 
 .AnnounceItems > img {
-  width: 20%;
-  height: 10rem;
-  border-radius: 4px;
+  max-width: 10rem;
+  min-width: 14%;
+  height: 8rem;
+  border-radius: 8px;
 }
 
 .AnnounceItems > div:nth-child(2) {
   width: 76%;
-  height: 10rem;
 }
 
 .AnnounceItems > div:nth-child(2) > div:nth-child(2) {
@@ -168,7 +168,6 @@ h4 {
 
 .AnnounceItems > div:nth-child(3) {
   width: 4%;
-  height: 10rem;
   display: flex;
   justify-content: center;
   align-items: center;
