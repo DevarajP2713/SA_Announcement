@@ -7,6 +7,7 @@ import {
   isAddEditDialogFun,
   masAnnounce,
   selAnnounce,
+  setIsLoader,
 } from "../../Redux/Reducer/AnnouncementReducer";
 import DragDropFile from "../../CommonFunctions/DragDropFile";
 import {
@@ -57,6 +58,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
     setCurData({ ...AppConfig.AnnounceJSON });
     dispatch(selAnnounce({ ...AppConfig.AnnounceJSON }));
     dispatch(isAddEditDialogFun(false));
+    dispatch(setIsLoader(false));
   };
 
   const _sortingFun = (): void => {
@@ -291,6 +293,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
     }
 
     if (_isValid) {
+      dispatch(setIsLoader(true));
       _handleJSON();
     }
   };
@@ -326,7 +329,8 @@ const AddAndEditAnnounce = (): JSX.Element => {
                 style={{
                   margin: 5,
                   textDecorationLine: "underline",
-                  color: "blue",
+                  color: "#01a95e",
+                  fontWeight: "500",
                 }}
               >
                 <label
@@ -456,30 +460,32 @@ const AddAndEditAnnounce = (): JSX.Element => {
 
         {/* Dialog box footer */}
         <div className="DialogFooter">
-          <div>
-            <div>
-              {isValidation
-                ? "Please fill in all required fields."
-                : isPriorityValid
-                ? `Please enter 1 to ${masArrayAnnounceData.length + 1}`
-                : ""}
-            </div>
-
+          <div className="footerActionBtns">
             <Button
               label="Close"
+              className="secondaryBtn"
               onClick={() => {
                 setCurData({ ...AppConfig.AnnounceJSON });
                 dispatch(selAnnounce({ ...AppConfig.AnnounceJSON }));
                 dispatch(isAddEditDialogFun(false));
+                dispatch(setIsLoader(false));
               }}
             />
 
             <Button
+              className="primaryBtn"
               label={curData.ID ? "Update" : "Save"}
               onClick={() => {
                 _validation();
               }}
             />
+          </div>
+          <div className="redFlag">
+            {isValidation
+              ? "Please fill in all required fields."
+              : isPriorityValid
+              ? `Please enter 1 to ${masArrayAnnounceData.length + 1}`
+              : ""}
           </div>
         </div>
       </div>

@@ -79,15 +79,40 @@
   display: none !important;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 4px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #01a95e;
+  border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #01a95e;
+}
+
 /* App component designs */
 .AppContainer {
-  padding: 20px;
+  padding: 30px 60px;
   min-height: calc(100vh - 70px);
-  background: #f5f5f5;
+  /* background: #f5f5f5; */
+  background: #f7fffd;
+  /* #b0b0b0 */
+  /* #01a95e */
 }
 
 #form-file-upload {
-  height: 7rem;
+  height: 8rem;
   max-width: 100%;
   text-align: center;
   position: relative;
@@ -102,11 +127,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-width: 2px;
-  border-radius: 1rem;
+  border-width: 3px;
+  border-radius: 6px;
   border-style: dashed;
-  border-color: #cbd5e1;
-  background-color: #f8fafc;
+  border-color: #01a95e;
+  background-color: #fff;
   cursor: pointer;
 }
 
@@ -136,4 +161,33 @@
   right: 0px;
   bottom: 0px;
   left: 0px;
+}
+.p-datepicker-trigger {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.p-calendar .p-inputtext {
+  border-radius: 4px 0 0 4px !important;
+}
+.primaryBtn {
+  min-width: 130px;
+  min-height: 30px !important;
+}
+.secondaryBtn {
+  min-width: 130px;
+  background-color: #fff !important;
+  border: 2px solid #adadad !important;
+  color: #adadad !important;
+  min-height: 30px !important;
+}
+.primaryBtnSM {
+  min-width: 80px;
+  min-height: 30px !important;
+}
+.secondaryBtnSM {
+  min-width: 80px;
+  background-color: #fff !important;
+  border: 2px solid #adadad !important;
+  color: #adadad !important;
+  min-height: 30px !important;
 }

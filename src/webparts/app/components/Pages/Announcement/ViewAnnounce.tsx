@@ -27,26 +27,31 @@ const ViewAnnounce = (): JSX.Element => {
             : ""
         }
       />
-      <div>
+      <div className="wrapper">
         <div className="viewLable">Description</div>
-        <div>{curAnnounceData.Description}</div>
+        <div className="textContent">{curAnnounceData.Description}</div>
       </div>
       <div>
-        <div>
+        <div className="wrapper">
           <div className="viewLable">Priority</div>
-          <div>{curAnnounceData.Priority}</div>
+          <div className="textContent">{curAnnounceData.Priority}</div>
         </div>
-        <div>
+        <div className="wrapper">
           <div className="viewLable">Start Date</div>
-          <div>{moment(curAnnounceData.StartDate).format("MM/DD/YYYY")}</div>
+          <div className="textContent">
+            {moment(curAnnounceData.StartDate).format("MM/DD/YYYY")}
+          </div>
         </div>
-        <div>
+        <div className="wrapper">
           <div className="viewLable">End Date</div>
-          <div>{moment(curAnnounceData.EndDate).format("MM/DD/YYYY")}</div>
+          <div className="textContent">
+            {moment(curAnnounceData.EndDate).format("MM/DD/YYYY")}
+          </div>
         </div>
       </div>
       <div>
         <Button
+          className="secondaryBtn"
           label="Close"
           onClick={() => {
             dispatch(selAnnounce({ ...AppConfig.AnnounceJSON }));

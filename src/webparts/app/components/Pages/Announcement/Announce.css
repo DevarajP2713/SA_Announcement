@@ -7,11 +7,11 @@
 
 .AnnounceHeader > div {
   font-size: 26px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .AnnounceHeader > button {
-  padding: 6px 10px;
+  padding: 8px 20px;
   border: none;
   background: #00a85a;
   border-radius: 4px;
@@ -19,7 +19,6 @@
 }
 
 .AnnounceHeader > button:hover {
-  padding: 6px 10px !important;
   border: none !important;
   background: #00a85a !important;
   border-radius: 4px !important;
@@ -40,7 +39,7 @@
   display: flex;
   position: relative;
   height: 75vh;
-  width: 75vw;
+  width: 50vw;
   background: #ffffff;
   padding-top: 20px;
   border-radius: 6px;
@@ -48,28 +47,32 @@
 
 .DialogContainer > div {
   width: 100%;
+  padding: 10px 30px;
 }
 
 .DialogHeader {
-  font-size: 26px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: #00a85a;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .DialogBody {
   margin-top: 20px;
-  max-height: 436px;
+  /* max-height: 450px; */
+  height: auto;
+  padding-bottom: 10px;
   overflow: auto;
 }
 
 h4 {
   margin: 0;
   padding-bottom: 10px;
-  font-weight: 500;
-  font-size: 18px;
-  color: #000000;
+  font-weight: 600;
+  font-size: 16px;
+  color: #030e12;
 }
 
 .DialogBody > div:nth-child(1) {
@@ -103,28 +106,44 @@ h4 {
 
 .DialogFooter {
   display: flex;
-  justify-content: end;
-  position: absolute;
-  bottom: 0px;
+  justify-content: center;
+  align-items: flex-end;
+  position: sticky !important;
+  flex-direction: column;
+  bottom: -34px;
   right: 0px;
-  height: 46px;
+  /* height: 46px; */
+  padding: 15px 0;
   width: 100%;
   background: #ffffff;
+  gap: 5px;
 }
 
-.DialogFooter > div {
+/* .DialogFooter > div {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px;
   margin-top: 20px;
-}
+}  */
 
-.DialogFooter > div > div:nth-child(1) {
+.DialogFooter > .redFlag {
   display: flex;
   justify-content: center;
   align-items: center;
   color: #ff0000;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 13px;
+  /* font-weight: 600; */
+}
+
+.DialogFooter > .footerActionBtns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  color: #ff0000;
+  font-size: 13px;
+  /* font-weight: 600; */
 }
 
 .alignEnd {
@@ -136,20 +155,26 @@ h4 {
   display: flex;
   width: 100%;
   background: #ffffff;
-  padding: 10px;
+  padding: 21px 35px;
+  padding-right: 20px;
   /* border-radius: 4px; */
-  gap: 10px;
+  gap: 15px;
 }
 
 .AnnounceItems > img {
   max-width: 10rem;
-  min-width: 14%;
-  height: 8rem;
+  min-width: 15%;
+  height: 6.5rem;
   border-radius: 8px;
 }
 
 .AnnounceItems > div:nth-child(2) {
-  width: 76%;
+  width: 83%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .AnnounceItems > div:nth-child(2) > div:nth-child(2) {
@@ -164,38 +189,61 @@ h4 {
 
 .AnnounceItems > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > i {
   cursor: pointer;
+  font-weight: bold;
 }
 
 .AnnounceItems > div:nth-child(3) {
-  width: 4%;
+  width: 3%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  color: #adadad;
+  padding-top: 5px;
 }
 
 .announceViewContainer {
-  width: 75vw;
+  width: 50vw;
   height: 75vh;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
 }
 
 .announceViewContainer > img {
   width: 100%;
-  height: 400px;
+  height: 55%;
   border-radius: 6px;
 }
 
 .announceViewContainer > div:nth-child(2) {
   margin: 10px 0px;
   border-left: 6px solid #00a85a;
-  padding-left: 8px;
+  /* padding-left: 8px; */
   border-radius: 4px;
+  background: #00a85a10;
+  padding: 10px;
 }
-
-.announceViewContainer > div:nth-child(3) {
+.wrapper {
   margin: 10px 0px;
+  border-left: 6px solid #00a85a;
+  /* padding-left: 8px; */
+  border-radius: 4px;
+  background: #00a85a10;
+  padding: 10px;
+}
+.viewLable {
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #298d5e;
+}
+.textContent {
+  color: #555;
+  line-height: 20px;
+}
+.announceViewContainer > div:nth-child(3) {
+  margin: 0px 0px;
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 22px;
 }
 
 .announceViewContainer > div:nth-child(3) > div {
@@ -208,16 +256,20 @@ h4 {
 .announceViewContainer > div:nth-child(4) {
   display: flex;
   justify-content: end;
+  padding-bottom: 20px;
+  margin-top: 10px;
 }
 
 .deleteContainer {
-  padding-top: 2rem;
+  padding-top: 1rem;
   width: 20vw;
-  height: 20vh;
+  height: auto;
 }
 
 .deleteContainer > h3 {
-  font-size: 20px;
+  font-size: 18px;
+  text-align: center;
+  color: #030e12;
   margin: 0px 0px 20px 0px;
 }
 
@@ -225,7 +277,9 @@ h4 {
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
+  color: #000;
 }
 
 .deleteContainer > div:nth-child(2) > i {
@@ -239,5 +293,32 @@ h4 {
 .deleteContainer > div:nth-child(3) {
   display: flex;
   gap: 10px;
-  justify-content: end;
+  justify-content: center;
+}
+.footerBottom {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.description {
+  font-size: 16px;
+  color: #555555;
+  line-height: 24px;
+  max-height: 72px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.date {
+  font-size: 13px;
+  color: #adadad;
+}
+.actionIcons {
+  color: #01a95e;
+  font-weight: bold;
 }

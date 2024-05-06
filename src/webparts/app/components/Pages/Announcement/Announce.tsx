@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   filAnnounce,
@@ -8,6 +9,7 @@ import {
   isViewDialogFun,
   masAnnounce,
   selAnnounce,
+  setIsLoader,
 } from "../../Redux/Reducer/AnnouncementReducer";
 import "./Announce.css";
 import {
@@ -27,6 +29,9 @@ import {
 import * as moment from "moment";
 import CommonFun from "../../CommonFunctions/CommonFun";
 import { sp } from "@pnp/sp/presets/all";
+import Loader from "../../Loader/loader";
+
+const dragIcon = require("../../../assets/svg/dragIcon.svg");
 
 const Announce = (): JSX.Element => {
   // useDispatch creation
@@ -51,9 +56,9 @@ const Announce = (): JSX.Element => {
   const curAnnounceData: IAnnounceJSON = useSelector(
     (state: any) => state.AnnounceDatas.curAnnounce
   );
-
-  // State creation
-  const [isLoader, setIsLoader] = useState<boolean>(false);
+  const isLoader: boolean = useSelector(
+    (state: any) => state.AnnounceDatas.isLoader
+  );
 
   // Functions creation
   const _itemTemplate = (val: IAnnounceJSON): JSX.Element => {
@@ -66,13 +71,13 @@ const Announce = (): JSX.Element => {
         />
 
         <div>
-          <div>{val?.Description}</div>
-          <div>
-            <div>
+          <div className="description">{val?.Description}</div>
+          <div className="footerBottom">
+            <div className="date">
               {moment(val?.StartDate).format("MM/DD/YYYY")} -{" "}
               {moment(val?.EndDate).format("MM/DD/YYYY")}
             </div>
-            <div>
+            <div className="actionIcons">
               <i
                 className="pi pi-eye"
                 onClick={() => {
@@ -99,7 +104,7 @@ const Announce = (): JSX.Element => {
         </div>
 
         <div>
-          <i className="pi pi-arrows-v" />
+          <img src={dragIcon} alt="drag this section" />
         </div>
       </div>
     );
@@ -109,6 +114,7 @@ const Announce = (): JSX.Element => {
     _arrAnnounce: IAnnounceJSON[],
     type: string
   ) => {
+    dispatch(setIsLoader(true));
     let data: any = {};
     const column: IAnnounceListColumns = AppConfig.AnnounceListColumns;
     let _remainderAnnounce: IAnnounceJSON[] = [];
@@ -149,11 +155,14 @@ const Announce = (): JSX.Element => {
 
             dispatch(masAnnounce([..._remainMaster]));
             dispatch(filAnnounce([..._sortingRecords]));
-            dispatch(isDeleteDialogFun(false));
+            dispatch(setIsLoader(false));
           }
         })
         .catch((err: any) => {
           console.log("err: ", err);
+          dispatch(masAnnounce([]));
+          dispatch(filAnnounce([]));
+          dispatch(setIsLoader(false));
         });
     }
   };
@@ -170,6 +179,8 @@ const Announce = (): JSX.Element => {
       RequestJSON: { ...data },
     })
       .then(async (res: any) => {
+        dispatch(isDeleteDialogFun(false));
+        dispatch(setIsLoader(true));
         await _bulkUpdateAnnounce([{ ...curAnnounceData }], "delete");
       })
       .catch((err: any) => {
@@ -230,16 +241,16 @@ const Announce = (): JSX.Element => {
 
         dispatch(masAnnounce([..._sortCurAnnounce]));
         dispatch(filAnnounce([..._filCurAnnounce]));
-        setIsLoader(true);
+        dispatch(setIsLoader(false));
       })
       .catch((err: any) => {
         console.log("err: ", err);
-        setIsLoader(true);
+        dispatch(setIsLoader(false));
       });
   };
 
   const _getDefaultFun = (): void => {
-    setIsLoader(false);
+    dispatch(setIsLoader(true));
     _getAnnouncementDatas();
   };
 
@@ -249,7 +260,19 @@ const Announce = (): JSX.Element => {
 
   return (
     <>
-      {isLoader && (
+      {isLoader ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+            height: "calc(100vh - 70px)",
+          }}
+        >
+          <Loader />
+        </div>
+      ) : (
         <div>
           {/* Header section */}
           <div className="AnnounceHeader">
@@ -307,6 +330,9 @@ const Announce = (): JSX.Element => {
               dispatch(isDeleteDialogFun(true));
             }}
             className="DialogBox"
+            style={{
+              paddingBottom: "10px !important",
+            }}
             showHeader={false}
           >
             <div className="deleteContainer">
@@ -315,15 +341,21 @@ const Announce = (): JSX.Element => {
                 <i className="pi pi-info-circle" />
                 <div>Do you want to delete this record?</div>
               </div>
-              <div>
+              <div
+                style={{
+                  marginBottom: "-10px",
+                }}
+              >
                 <Button
                   label="No"
+                  className="secondaryBtnSM"
                   onClick={() => {
                     dispatch(isDeleteDialogFun(false));
                   }}
                 />
                 <Button
                   label="Yes"
+                  className="primaryBtnSM"
                   onClick={() => {
                     _deleteRecord();
                   }}
