@@ -7,6 +7,7 @@ const mainDatas: any = {
   isAddAndEditDialog: false,
   isViewDialog: false,
   isDeleteDialog: false,
+  isLoader: true,
 };
 
 const AnnouncementReducer: any = createSlice({
@@ -31,6 +32,9 @@ const AnnouncementReducer: any = createSlice({
     isDeleteDialogFun: (state, action) => {
       state.isDeleteDialog = action.payload;
     },
+    setIsLoader: (state, action) => {
+      state.isLoader = action.payload;
+    },
   },
 });
 
@@ -41,5 +45,6 @@ export const {
   isAddEditDialogFun,
   isViewDialogFun,
   isDeleteDialogFun,
+  setIsLoader,
 } = AnnouncementReducer.actions;
 export default AnnouncementReducer.reducer;

@@ -1,0 +1,29 @@
+.dual-ring {
+  width: 80px;
+  height: 80px;
+  position: relative;
+}
+
+.dual-ring > div {
+  display: block;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 4px solid #01a95e;
+  border-color: #01a95e transparent #01a95e transparent;
+}
+
+.dual-ring > div:nth-child(1) {
+  animation: guruguru 1.2s ease-in-out infinite;
+}
+
+@keyframes guruguru {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
