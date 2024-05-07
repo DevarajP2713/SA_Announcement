@@ -98,7 +98,9 @@ const AddAndEditAnnounce = (): JSX.Element => {
 
   const _arrangedDatas = async (type: string, Id: number) => {
     // Workbench path value
-    let _curPageURL: string = `https://safeaccounting.sharepoint.com/sites/CRMDev/Lists/Announcement/Attachments/${Id}/${
+    let _curPageURL: string = `${
+      window.location.origin
+    }/sites/CRMDev/Lists/Announcement/Attachments/${Id}/${
       imgFile.content.length
         ? imgFile.content[0].name
         : curData.Attachments[0].ServerRelativeUrl
@@ -151,6 +153,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
       { ..._curJSON },
       [...arrAnnounceData],
       [...masArrayAnnounceData],
+      { ...curAnnounceData },
       type
     );
 

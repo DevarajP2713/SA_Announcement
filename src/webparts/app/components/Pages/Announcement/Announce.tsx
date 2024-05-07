@@ -71,7 +71,9 @@ const Announce = (): JSX.Element => {
         />
 
         <div>
-          <div className="description">{val?.Description}</div>
+          <div className="description" title={val?.Description}>
+            {val?.Description}
+          </div>
           <div className="footerBottom">
             <div className="date">
               {moment(val?.StartDate).format("MM/DD/YYYY")} -{" "}
