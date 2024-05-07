@@ -33,6 +33,7 @@ const _newAndEditAnnouncePrepare = (
   curData: IAnnounceJSON,
   curAnnounceData: IAnnounceJSON[],
   masterAnnounceData: IAnnounceJSON[],
+  curJSON: IAnnounceJSON,
   type: string
 ): IAnnounceJSON[] => {
   let _isMinNextAnnounce: boolean = false;
@@ -87,18 +88,38 @@ const _newAndEditAnnouncePrepare = (
             _curAnnounceArray[i].ID !== curData.ID
           ) {
             _isData = false;
-            if (
-              _curAnnounceArray.length <= Number(curData.Priority) &&
-              _curAnnounceArray.length >= 2
-            ) {
-              _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
-              _arrMasAnnounce.push({ ...curData });
+            if (Number(curJSON.Priority) < Number(curData.Priority)) {
+              if (
+                _curAnnounceArray.length <= Number(curData.Priority) &&
+                _curAnnounceArray.length >= 2
+              ) {
+                _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
+                _arrMasAnnounce.push({ ...curData });
+              } else {
+                _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
+                _arrMasAnnounce.push({ ...curData });
+              }
             } else {
-              _arrMasAnnounce.push({ ...curData });
-              _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
+              if (
+                _curAnnounceArray.length <= Number(curData.Priority) &&
+                _curAnnounceArray.length >= 2
+              ) {
+                _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
+                _arrMasAnnounce.push({ ...curData });
+              } else {
+                _arrMasAnnounce.push({ ...curData });
+                _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
+              }
             }
           } else if (_curAnnounceArray[i].ID !== curData.ID) {
             _arrMasAnnounce.push({ ..._curAnnounceArray[i] });
+          } else if (
+            Number(_curAnnounceArray[i].Priority) ===
+              Number(curData.Priority) &&
+            _curAnnounceArray[i].ID === curData.ID
+          ) {
+            _isData = false;
+            _arrMasAnnounce.push({ ...curData });
           }
 
           if (_isData && _curAnnounceArray.length === i + 1) {
