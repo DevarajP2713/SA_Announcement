@@ -119,7 +119,11 @@ const _newAndEditAnnouncePrepare = (
             _curAnnounceArray[i].ID === curData.ID
           ) {
             _isData = false;
-            _arrMasAnnounce.push({ ...curData });
+            if (type !== "delete") {
+              _arrMasAnnounce.push({ ...curData });
+            } else if (Number(curData.Priority) === Number(curJSON.Priority)) {
+              _arrMasAnnounce.push({ ...curData });
+            }
           }
 
           if (_isData && _curAnnounceArray.length === i + 1) {

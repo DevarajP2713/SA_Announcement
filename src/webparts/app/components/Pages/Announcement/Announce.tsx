@@ -140,7 +140,7 @@ const Announce = (): JSX.Element => {
       data[column.Priority] = Number(_priorityAnnounce[i].Priority);
 
       await sp.web.lists
-        .getByTitle(AppConfig.ListNames.Announcement)
+        .getByTitle(AppConfig.ListNames.Announcements)
         .items.getById(Number(_priorityAnnounce[i].ID))
         .update({ ...data })
         .then(async (res: any) => {
@@ -176,7 +176,7 @@ const Announce = (): JSX.Element => {
     data[column.IsDelete] = true;
 
     SPServices.SPUpdateItem({
-      Listname: AppConfig.ListNames.Announcement,
+      Listname: AppConfig.ListNames.Announcements,
       ID: Number(curAnnounceData.ID),
       RequestJSON: { ...data },
     })
@@ -193,9 +193,10 @@ const Announce = (): JSX.Element => {
 
   const _getAnnouncementDatas = (): void => {
     SPServices.SPReadItems({
-      Listname: AppConfig.ListNames.Announcement,
-      Select: "*, AttachmentFiles",
-      Expand: "AttachmentFiles",
+      Listname: AppConfig.ListNames.Announcements,
+      Select:
+        "*, FileLeafRef, FileRef, FileDirRef, Author/Title, Author/EMail, Author/Id",
+      Expand: "File, Author",
       Filter: [
         {
           FilterKey: "IsDelete",
@@ -214,18 +215,17 @@ const Announce = (): JSX.Element => {
         let _arrDatas: IAnnounceJSON[] = [];
 
         res?.forEach((data: any) => {
-          let _objAttach: IAttachObj = data?.AttachmentFiles.length && {
-            name: data?.AttachmentFiles[0]?.FileName,
+          let _objAttach: IAttachObj = data?.File && {
+            name: data?.File?.Name,
             content: [],
             ServerRelativeUrl:
-              window.location.origin +
-              data?.AttachmentFiles[0]?.ServerRelativeUrl,
+              window.location.origin + data?.File?.ServerRelativeUrl,
           };
 
           _arrDatas.push({
             ID: data?.ID,
             Attachments: _objAttach?.name ? [{ ..._objAttach }] : [],
-            Description: data?.Description || "",
+            Description: data?.Content || "",
             Priority: data?.Priority || "",
             StartDate: data.StartDate ? new Date(data.StartDate) : null,
             EndDate: data.EndDate ? new Date(data.EndDate) : null,
