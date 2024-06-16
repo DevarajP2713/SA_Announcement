@@ -1,5 +1,10 @@
 interface IListName {
   Announcement: string;
+  Announcements: string;
+}
+
+interface ISitePath {
+  sitePath: string;
 }
 
 interface IAnnounceListColumns {
@@ -40,4 +45,5 @@ export {
   IAnnounceJSON,
   IAttachObj,
   IAttachments,
+  ISitePath,
 };

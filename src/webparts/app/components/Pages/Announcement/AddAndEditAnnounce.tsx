@@ -22,11 +22,13 @@ import {
   InputText,
   InputTextarea,
 } from "../../PrimeReactComponent/primereactComponents";
-import SPServices from "../../CommonServices/SPServices";
+// import SPServices from "../../CommonServices/SPServices";
 import CommonFun from "../../CommonFunctions/CommonFun";
+import * as moment from "moment";
 
 let _arrAnnounce: IAnnounceJSON[] = [];
 let _priorityAnnounce: IAnnounceJSON[] = [];
+let _imgName: string = "";
 
 const AddAndEditAnnounce = (): JSX.Element => {
   // useDispatch creation
@@ -78,7 +80,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
         data[column.Priority] = Number(_priorityAnnounce[i].Priority);
 
         await sp.web.lists
-          .getByTitle(AppConfig.ListNames.Announcement)
+          .getByTitle(AppConfig.ListNames.Announcements)
           .items.getById(Number(_priorityAnnounce[i].ID))
           .update({ ...data })
           .then(async (res: any) => {
@@ -98,27 +100,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
 
   const _arrangedDatas = async (type: string, Id: number) => {
     // Workbench path value
-    let _curPageURL: string = `${
-      window.location.origin
-    }/sites/CRMDev/Lists/Announcement/Attachments/${Id}/${
-      imgFile.content.length
-        ? imgFile.content[0].name
-        : curData.Attachments[0].ServerRelativeUrl
-    }`;
-
-    // Environment path value
-    // let _splitPathName: string[] = window.location.pathname.split("/");
-    // let attachIndex: any = _splitPathName.indexOf("Attachments");
-    // let _curPathArray: string[] = attachIndex.splice(attachIndex, 1);
-    // _curPathArray.shift();
-    // let _curPath: string = _curPathArray.join("/");
-    // let _curPageURL: string = `${window.location.origin}/${_curPath}/${
-    //   Id
-    // }/${
-    //   imgFile.content.length
-    //     ? imgFile.content[0].name
-    //     : curData.Attachments[0].ServerRelativeUrl
-    // }`;
+    let _curPageURL: string = `${window.location.origin}${AppConfig.SitePath.sitePath}${AppConfig.ListNames.Announcements}/${_imgName}`;
 
     let _curJSON: IAnnounceJSON = {
       ID: Id,
@@ -149,38 +131,150 @@ const AddAndEditAnnounce = (): JSX.Element => {
       ],
     };
 
-    _arrAnnounce = await CommonFun._newAndEditAnnouncePrepare(
-      { ..._curJSON },
-      [...arrAnnounceData],
-      [...masArrayAnnounceData],
-      { ...curAnnounceData },
-      type
+    let _isAnnounce: boolean = false;
+    let _isMasAnnounce: boolean = false;
+    let _delArrAnnounce: IAnnounceJSON[] = [];
+    let _delMasAnnounce: IAnnounceJSON[] = [];
+    let _selJSON: IAnnounceJSON = { ...curAnnounceData };
+
+    if (type === "delete") {
+      for (let i: number = 0; arrAnnounceData.length > i; i++) {
+        if (curData.ID === arrAnnounceData[i].ID) {
+          _delArrAnnounce.push({ ..._curJSON });
+        } else {
+          _delArrAnnounce.push({ ...arrAnnounceData[i] });
+        }
+
+        if (arrAnnounceData.length === _delArrAnnounce.length) {
+          _isAnnounce = true;
+        }
+      }
+
+      for (let i: number = 0; masArrayAnnounceData.length > i; i++) {
+        if (curData.ID === masArrayAnnounceData[i].ID) {
+          _delMasAnnounce.push({ ..._curJSON });
+        } else {
+          _delMasAnnounce.push({ ...masArrayAnnounceData[i] });
+        }
+
+        if (masArrayAnnounceData.length === _delMasAnnounce.length) {
+          _isMasAnnounce = true;
+        }
+      }
+    } else {
+      _delArrAnnounce = [...arrAnnounceData];
+      _delMasAnnounce = [...masArrayAnnounceData];
+      _isAnnounce = true;
+      _isMasAnnounce = true;
+    }
+
+    if (_isAnnounce && _isMasAnnounce) {
+      _arrAnnounce = CommonFun._newAndEditAnnouncePrepare(
+        { ..._curJSON },
+        [..._delArrAnnounce],
+        [..._delMasAnnounce],
+        { ..._selJSON },
+        type
+      );
+
+      _priorityAnnounce = await _arrAnnounce.map(
+        (val: IAnnounceJSON, i: number) => ({
+          ...val,
+          Priority: i + 1,
+        })
+      );
+
+      await _bulkUpdateAnnounce();
+    }
+  };
+
+  const _updateAnnouncement = async (data: any, attachData: any) => {
+    let _libPath: string = `${AppConfig.SitePath.sitePath}${AppConfig.ListNames.Announcements}`;
+    let fileAddResult: any;
+    let listItem: any;
+
+    const libraryFolder: any = await sp.web.getFolderByServerRelativeUrl(
+      _libPath
     );
 
-    _priorityAnnounce = await _arrAnnounce.map(
-      (val: IAnnounceJSON, i: number) => ({
-        ...val,
-        Priority: i + 1,
-      })
-    );
+    if (attachData.Attachments[0].content.length) {
+      _imgName = `${
+        attachData?.Attachments[0]?.name.split(".")[0]
+      }_${moment().format("YYYYMMDDhhmmss")}.${
+        attachData?.Attachments[0]?.name.split(".")[1]
+      }`;
 
-    await _bulkUpdateAnnounce();
+      await libraryFolder.files
+        .getByName(curData?.Attachments[0]?.name)
+        .delete();
+
+      fileAddResult = await libraryFolder.files.add(
+        _imgName,
+        attachData?.Attachments[0]?.content[0],
+        true
+      );
+
+      listItem = await fileAddResult.file.getItem();
+
+      delete data.ID;
+
+      await listItem
+        .update({ ...data })
+        .then(async (res: any) => {
+          await _arrangedDatas("delete", Number(listItem.ID));
+        })
+        .catch((err: any) => {
+          console.log("err: ", err);
+          _dialogCloseFun();
+        });
+    } else {
+      await sp.web.lists
+        .getByTitle(AppConfig.ListNames.Announcements)
+        .items.getById(data.ID)
+        .update({ ...data })
+        .then(async (res: any) => {
+          await _arrangedDatas("", Number(curData.ID));
+        })
+        .catch((err: any) => {
+          console.log("err: ", err);
+          _dialogCloseFun();
+        });
+    }
   };
 
-  const _addAttachment = (
-    Id: number | null,
-    attachData: any,
-    type: string
-  ): void => {
-    sp.web.lists
-      .getByTitle(AppConfig.ListNames.Announcement)
-      .items.getById(Number(Id))
-      .attachmentFiles.add(
-        attachData?.Attachments[0]?.name,
-        attachData?.Attachments[0]?.content[0]
-      )
-      .then(async (res: any) => {
-        await _arrangedDatas(type, Number(Id));
+  const _addAnnouncement = async (_data: any, attachData: any) => {
+    _imgName = `${
+      attachData?.Attachments[0]?.name.split(".")[0]
+    }_${moment().format("YYYYMMDDhhmmss")}.${
+      attachData?.Attachments[0]?.name.split(".")[1]
+    }`;
+
+    await sp.web
+      .getFolderByServerRelativePath(AppConfig.ListNames.Announcements)
+      .files.expand("ListItemAllFields")
+      .add(_imgName, attachData?.Attachments[0]?.content[0], false)
+      .then(async (data: any) => {
+        const item = await data.file.getItem();
+        const itemId = item.Id;
+
+        await data.file
+          .expand("ListItemAllFields")
+          .getItem()
+          .then(async (item: any) => {
+            await item
+              .update({ ..._data })
+              .then(async (res: any) => {
+                await _arrangedDatas("new", Number(itemId));
+              })
+              .catch((err: any) => {
+                console.log("err: ", err);
+                _dialogCloseFun();
+              });
+          })
+          .catch((err: any) => {
+            console.log("err: ", err);
+            _dialogCloseFun();
+          });
       })
       .catch((err: any) => {
         console.log("err: ", err);
@@ -188,53 +282,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
       });
   };
 
-  const _deleteAttachment = (Id: number | null, attachData: any): void => {
-    sp.web.lists
-      .getByTitle(AppConfig.ListNames.Announcement)
-      .items.getById(Number(Id))
-      .attachmentFiles.getByName(curData.Attachments[0].name)
-      .delete()
-      .then((res: any) => {
-        _addAttachment(Id, attachData, "");
-      })
-      .catch((err: any) => {
-        console.log("err: ", err);
-        _dialogCloseFun();
-      });
-  };
-
-  const _updateAnnouncement = (data: any, attachData: any): void => {
-    SPServices.SPUpdateItem({
-      Listname: AppConfig.ListNames.Announcement,
-      ID: data?.ID,
-      RequestJSON: { ...data },
-    })
-      .then(async (res: any) => {
-        imgFile.content.length
-          ? _deleteAttachment(curData.ID, attachData)
-          : await _arrangedDatas("", Number(curData.ID));
-      })
-      .catch((err: any) => {
-        console.log("err: ", err);
-        _dialogCloseFun();
-      });
-  };
-
-  const _addAnnouncement = (data: any, attachData: any): void => {
-    SPServices.SPAddItem({
-      Listname: AppConfig.ListNames.Announcement,
-      RequestJSON: { ...data },
-    })
-      .then((res: any) => {
-        _addAttachment(res.data.ID, attachData, "new");
-      })
-      .catch((err: any) => {
-        console.log("err: ", err);
-        _dialogCloseFun();
-      });
-  };
-
-  const _handleJSON = (): void => {
+  const _handleJSON = async () => {
     let announceData: any = {};
     let announceAttach: any = {};
     const column: IAnnounceListColumns = { ...AppConfig.AnnounceListColumns };
@@ -266,11 +314,11 @@ const AddAndEditAnnounce = (): JSX.Element => {
     ];
 
     curData.ID
-      ? _updateAnnouncement(announceData, announceAttach)
-      : _addAnnouncement(announceData, announceAttach);
+      ? await _updateAnnouncement(announceData, announceAttach)
+      : await _addAnnouncement(announceData, announceAttach);
   };
 
-  const _validation = (): void => {
+  const _validation = async () => {
     let _isValid: boolean = false;
 
     if (
@@ -297,7 +345,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
 
     if (_isValid) {
       dispatch(setIsLoader(true));
-      _handleJSON();
+      await _handleJSON();
     }
   };
 
@@ -309,6 +357,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
   };
 
   useEffect(() => {
+    _imgName = "";
     _getSelectedData();
   }, []);
 
@@ -478,8 +527,8 @@ const AddAndEditAnnounce = (): JSX.Element => {
             <Button
               className="primaryBtn"
               label={curData.ID ? "Update" : "Save"}
-              onClick={() => {
-                _validation();
+              onClick={async () => {
+                await _validation();
               }}
             />
           </div>

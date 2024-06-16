@@ -3,17 +3,23 @@ import {
   IAnnounceListColumns,
   IAttachments,
   IListName,
+  ISitePath,
 } from "../Interfaces/ISAAInterface";
 
 export namespace AppConfig {
   export const ListNames: IListName = {
     Announcement: "Announcement",
+    Announcements: "Announcements",
+  };
+
+  export const SitePath: ISitePath = {
+    sitePath: "/sites/CRMDev/",
   };
 
   export const AnnounceListColumns: IAnnounceListColumns = {
     ID: "ID",
     Attachments: "Attachments",
-    Description: "Description",
+    Description: "Content",
     EndDate: "EndDate",
     IsArchive: "IsArchive",
     IsDelete: "IsDelete",
