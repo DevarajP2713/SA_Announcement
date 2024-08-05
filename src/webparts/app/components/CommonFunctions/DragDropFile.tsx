@@ -84,6 +84,7 @@ const DragDropFile = (props: any) => {
       onSubmit={(e) => e.preventDefault()}
     >
       <input
+        disabled={props?.ID ? true : false}
         ref={inputRef}
         type="file"
         id="input-file-upload"
@@ -94,16 +95,26 @@ const DragDropFile = (props: any) => {
       <label
         id="label-file-upload"
         htmlFor="input-file-upload"
+        style={{
+          cursor: props?.ID ? "not-allowed" : "pointer",
+        }}
         className={dragActive ? "drag-active" : ""}
       >
         <div>
           <p>Drag and drop your file here or</p>
-          <button className="upload-button" onClick={onButtonClick}>
+          <button
+            disabled={props?.ID ? true : false}
+            style={{
+              cursor: props?.ID ? "not-allowed" : "pointer",
+            }}
+            className="upload-button"
+            onClick={onButtonClick}
+          >
             Upload a file
           </button>
         </div>
       </label>
-      {dragActive && (
+      {dragActive && !props?.ID && (
         <div
           id="drag-file-element"
           onDragEnter={handleDrag}

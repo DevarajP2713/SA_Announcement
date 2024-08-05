@@ -376,7 +376,11 @@ const AddAndEditAnnounce = (): JSX.Element => {
               Image upload <span style={{ color: "red" }}>*</span>
             </h4>
             <div>
-              <DragDropFile setNewVisitor={setImgFile} newVisitor={imgFile} />
+              <DragDropFile
+                setNewVisitor={setImgFile}
+                newVisitor={imgFile}
+                ID={curData?.ID || null}
+              />
               <div
                 style={{
                   margin: 5,
