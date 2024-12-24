@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-namespace */
+
 import {
   IAnnounceJSON,
   IAnnounceListColumns,
@@ -13,7 +15,8 @@ export namespace AppConfig {
   };
 
   export const SitePath: ISitePath = {
-    sitePath: "/sites/CRMDev/",
+    // sitePath: "/sites/CRMDev/",
+    sitePath: "/sites/SAFEACCOUNTINGKhuramShazad704/",
   };
 
   export const AnnounceListColumns: IAnnounceListColumns = {

@@ -283,6 +283,7 @@ const Announce = (): JSX.Element => {
               icon="pi pi-plus"
               label="Add new"
               onClick={() => {
+                dispatch(selAnnounce({ ...AppConfig.AnnounceJSON }));
                 dispatch(isAddEditDialogFun(true));
               }}
             />

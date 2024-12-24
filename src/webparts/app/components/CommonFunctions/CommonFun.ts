@@ -281,7 +281,6 @@ const _filterReminderData = (
   let _filMasterArray: IAnnounceJSON[] = [];
 
   if (type === "delete") {
-    debugger;
     _filteredArray = data.filter(
       (obj1: IAnnounceJSON) =>
         !curData.some((obj2: IAnnounceJSON) => obj1.ID === obj2.ID)
