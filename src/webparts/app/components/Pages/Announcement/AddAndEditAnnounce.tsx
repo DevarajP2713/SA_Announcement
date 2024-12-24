@@ -188,7 +188,10 @@ const AddAndEditAnnounce = (): JSX.Element => {
     }
   };
 
-  const _updateAnnouncement = async (data: any, attachData: any) => {
+  const _updateAnnouncement = async (
+    data: any,
+    attachData: any
+  ): Promise<void> => {
     let _libPath: string = `${AppConfig.SitePath.sitePath}${AppConfig.ListNames.Announcements}`;
     let fileAddResult: any;
     let listItem: any;
@@ -197,7 +200,7 @@ const AddAndEditAnnounce = (): JSX.Element => {
       _libPath
     );
 
-    if (attachData.Attachments[0].content.length) {
+    if (!attachData?.Attachments?.[0]?.ServerRelativeUrl) {
       _imgName = `${
         attachData?.Attachments[0]?.name.split(".")[0]
       }_${moment().format("YYYYMMDDhhmmss")}.${
